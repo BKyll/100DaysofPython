@@ -7,8 +7,14 @@ def report():
 
     print('\nResource Report:\n')
     for r in resources:
-        print(f'{r}: {resources[r]}')
-
+        if r == "money":
+            print(f"Money: ${resources[r]:.2f}")
+        else:
+            if r == 'coffee':
+                print(f'{r.capitalize()}: {resources[r]} g')
+            else:
+                print(f'{r.capitalize()}: {resources[r]} ml')
+            
 
 # TODO 2: Function to check if the machine has enough resources for the chosen beverage (return bool)
 def check_resources(selection):
@@ -26,21 +32,16 @@ def check_resources(selection):
 # TODO 3: Coin the coins given by user. (call transaction())
 def process_coins(selection):
     """Calculates the total value of coins provided by the user."""
-    
-    total_input = 0
-    quarters_input = int(input('How many quarters do you input? '))
-    dimes_input = int(input('How many dimes do you input? '))
-    nickels_input = int(input('How many nickels do you input? '))
+    item_cost = MENU[selection]["cost"]
 
-    for c in range(0, quarters_input):
-        total_input += coins["quarter"]
-    for c in range(0, dimes_input):
-        total_input += coins["dime"]
-    for c in range(0, nickels_input):
-        total_input += coins["nickel"]
+    total_input = 0
+    total_input += (int(input('How many quarters do you input? ')) * coins["quarter"])
+    total_input += (int(input('How many dimes do you input? ')) * coins["dime"])
+    total_input += (int(input('How many nickels do you input? ')) * coins["nickel"])
 
     print(f"Input: ${total_input}")
-    if total_input >= MENU[selection]["cost"]:
+    
+    if total_input >= item_cost:
         return True
     else:
         return False
@@ -67,8 +68,8 @@ def print_menu():
 
 
 # Main Function
-again = True
-while again == True:
+is_on = True
+while is_on == True:
     menu_items = list(MENU.keys())
     print('☕What drink would you like?☕')
     print_menu()
@@ -82,17 +83,17 @@ while again == True:
             if process_coins(chosen_item) == True:
                 vend_coffee(chosen_item)
             else:
-                print("Not enough coins input.")
+                print("Insufficient coins.")
         else:
             print('Unable to vend due to lack of resources.')
     elif user_choice == 0:
         report()
     else:
-        print("Invalid choice: please try again.")
+        print("Invalid choice: please try again. ")
 
-    try_again = input("Make another selection? Y or N").lower()
-    if try_again == 'y':
-        again = True
+    power = input("Should the machine stay on? Y or N ").lower()
+    if power == 'y':
+        is_on = True
     else:
-        again = False
+        is_on = False
 
