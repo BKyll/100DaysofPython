@@ -1,3 +1,5 @@
+# New questions/answers can be pulled from https://opentdb.com/
+
 question_data = [
     {
         "category": "Entertainment: Video Games",
