@@ -6,20 +6,24 @@
 # 6. Detect collision with paddle
 # 7. Detect when paddle misses
 # 8. Keep score
+
 from turtle import Screen, Turtle
 from score import Scoreboard
+from paddle import Paddle
+from ball import Ball
 import time
 
+# Field
 field = Screen()
-field.setup(1000, 600)
+field.setup(800, 600)
 field.bgcolor("black")
 field.title("PONG")
 field.tracer(0)
 
 net = Turtle()
+net.hideturtle()
 net.color("white")
 net.pensize(5)
-net.shape("square")
 net.pu()
 net.goto(0, 280)
 net.seth(270)
@@ -31,9 +35,48 @@ for _ in range(19):
 
 score = Scoreboard()
 
+# Paddles
+r_start = (350, 0)
+l_start = (-350, 0)
+r_paddle = Paddle(r_start)
+l_paddle = Paddle(l_start)
+
+field.listen()
+field.onkey(r_paddle.up, 'Up')
+field.onkey(r_paddle.down, 'Down')
+field.onkey(l_paddle.up, 'w')
+field.onkey(l_paddle.down, 's')
+
+# Ball
+ball = Ball()
+
+
+def reset_game():
+    ball.new_serve()
+    r_paddle.new_server(r_start)
+    l_paddle.new_server(l_start)
+
+
+# Main
 game_is_on = True
 while game_is_on:
+    time.sleep(ball.move_speed)
     field.update()
-    time.sleep(0.1)
+    ball.move_ball()
 
-field.exitonclick()
+    # Hitting a wall
+    if ball.ycor() > 280 or ball.ycor() < -280:
+        ball.bounce_y()
+
+    # Hitting a paddle
+    if ball.distance(r_paddle) < 50 and ball.xcor() >= 330 or ball.distance(l_paddle) < 50 and ball.xcor() <= -330:
+        ball.bounce_x()
+
+    # Scoring a goal
+    if ball.xcor() > 380:
+        score.score('l')
+        reset_game()
+
+    if ball.xcor() < -380:
+        score.score('r')
+        reset_game()
