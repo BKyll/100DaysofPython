@@ -1,5 +1,7 @@
 from turtle import Turtle
+from pathlib import Path
 
+CWD = Path.cwd()
 ALIGNMENT = "center"
 FONT = ("Courier", 18, "normal")
 
@@ -8,7 +10,7 @@ class Scoreboard(Turtle):
     def __init__(self):
         super().__init__()
         self.score = 0
-        with open("G:\\My Drive\\100DaysofPython\\020-021-Snake\\data.txt", mode='r') as data:
+        with open(f"{CWD}\\data.txt", mode='r') as data:
             self.high_score = int(data.read())
         self.color('white')
         self.hideturtle()
@@ -23,7 +25,7 @@ class Scoreboard(Turtle):
     def reset(self):
         if self.score > self.high_score:
             self.high_score = self.score
-            with open("G:\\My Drive\\100DaysofPython\\020-021-Snake\\data.txt", mode='w') as data:
+            with open(f"{CWD}\\data.txt", mode='w') as data:
                 data.write(str(self.high_score))
         self.score = 0
         self.update_scoreboard()
