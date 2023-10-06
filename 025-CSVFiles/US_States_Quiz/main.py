@@ -3,16 +3,19 @@ import pandas
 
 screen = turtle.Screen()
 screen.title("US States Game")
+screen.setup(720, 500)
 image = "025-CSVFiles/US_States_Quiz/blank_states_img.gif"
 screen.addshape(image)
-screen.setup(720, 500)
-
 turtle.shape(image)
+
 writer = turtle.Turtle()
 writer.hideturtle()
 writer.pu()
-WRITER_ALIGN = "left"
+WRITER_ALIGN = "center"
 WRITER_FONT = ("Courier", 8, "normal")
+
+writer.goto(-165, 225)
+writer.write('"Exit" to quit.', align=WRITER_ALIGN, font=WRITER_FONT)
 
 # # Getting state x, y coordinates
 # def get_mouse_click_coor(x, y):
@@ -31,13 +34,19 @@ def add_label(state):
 
 
 while correct_guesses != len(states.state):
-    user_guess = screen.textinput(title=f"{correct_guesses}/{len(states.state)} Correct States",
+    user_guess = screen.textinput(title=f"{correct_guesses}/{len(states.state)} States Correct",
                                   prompt="Guess another state!").title()
-    print(user_guess)
+    if user_guess == "Exit":
+        states_to_learn = []
+        for s in states.state:
+            if s not in states_guessed:
+                states_to_learn.append(s)
+        stl = pandas.DataFrame(states_to_learn, columns=["state"])
+        stl.to_csv("025-CSVFiles/US_States_Quiz/states_to_learn.csv")
+        break
+
     if user_guess not in states_guessed:
         if user_guess in states.state.values:
             correct_guesses += 1
             states_guessed.append(user_guess)
             add_label(user_guess)
-
-turtle.mainloop()
