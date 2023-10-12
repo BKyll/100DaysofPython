@@ -1,4 +1,4 @@
-# NOTE: Do not modify any files except main.py
+# NOTE: Do not modify any files except ListComprehension.py
 
 from menu import Menu, MenuItem
 from coffee_maker import CoffeeMaker

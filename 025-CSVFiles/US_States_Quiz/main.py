@@ -37,10 +37,13 @@ while correct_guesses != len(states.state):
     user_guess = screen.textinput(title=f"{correct_guesses}/{len(states.state)} States Correct",
                                   prompt="Guess another state!").title()
     if user_guess == "Exit":
-        states_to_learn = []
-        for s in states.state:
-            if s not in states_guessed:
-                states_to_learn.append(s)
+        # Day 26 Update with List Comprehension
+        # Old
+        # states_to_learn = []
+        # for s in states.state:
+        #     if s not in states_guessed:
+        #         states_to_learn.append(s)
+        states_to_learn = [s for s in states.state if s not in states_guessed]
         stl = pandas.DataFrame(states_to_learn, columns=["state"])
         stl.to_csv("025-CSVFiles/US_States_Quiz/states_to_learn.csv")
         break
