@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import pyperclip
 import random
 
 
@@ -18,7 +19,9 @@ def generate_password():
     password_list += [random.choice(symbols) for _ in range(random.randint(2, 4))]
 
     random.shuffle(password_list)
-    password_entry.insert(0, "".join(password_list))
+    password = "".join(password_list)
+    password_entry.insert(0, password)
+    pyperclip.copy(password)
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
@@ -36,7 +39,7 @@ def save_password():
 
 def clear_form():
     website_entry.delete(0, END)
-    username_entry.delete(0, END)
+    username_entry.insert(0, "bryan@email.com")
     password_entry.delete(0, END)
 
 
@@ -64,7 +67,7 @@ username_label.grid(row=2, column=0)
 
 username_entry = Entry(width=45)
 username_entry.grid(row=2, column=1, columnspan=2)
-username_entry.insert(END, "bryan@email.com")
+username_entry.insert(0, "bryan@email.com")
 
 # Password label, password entry (width: 21), generate button
 password_label = Label(text="Password:")
