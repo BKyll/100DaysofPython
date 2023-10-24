@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import pyperclip
 import random
+import json
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -26,12 +27,29 @@ def generate_password():
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save_password():
+    website = website_entry.get()
+    username = username_entry.get()
+    password = password_entry.get()
+    new_data = {
+        website: {
+            "email": username,
+            "password": password,
+        }
+    }
     if "" not in {website_entry.get(), username_entry.get(), password_entry.get()}:
-        is_ok = messagebox.askokcancel(title=f"{website_entry.get()}",
-                                       message=f"Add: {username_entry.get()}\nPassword: {password_entry.get()}")
-        if is_ok:
-            with open("029-PasswordManager/passwords.txt", "a") as password_file:
-                password_file.write(f"{website_entry.get()} | {username_entry.get()} | {password_entry.get()}\n")
+        try:
+            with open("passwords.json", "r") as password_file:
+                # Read old data
+                data = json.load(password_file)
+                # Updating old data with new data
+                data.update(new_data)
+        except FileNotFoundError:
+            data = new_data
+        finally:
+            with open("passwords.json", "w") as password_file:
+                # Saving updated data
+                json.dump(data, password_file, indent=4)
+
             clear_form()
     else:
         messagebox.showerror(title="Incomplete Information", message="Please fill all data fields.")
@@ -43,13 +61,16 @@ def clear_form():
     password_entry.delete(0, END)
 
 
+def search_password():
+    pass
+
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.config(padx=50, pady=50)
 window.title("Password Manager")
 
 canvas = Canvas(width=200, height=200)
-logo_img = PhotoImage(file="029-PasswordManager/logo.png")
+logo_img = PhotoImage(file="logo.png")
 canvas.create_image(100, 100, image=logo_img)
 canvas.grid(row=0, column=1)
 
@@ -57,9 +78,12 @@ canvas.grid(row=0, column=1)
 website_label = Label(text="Website:")
 website_label.grid(row=1, column=0)
 
-website_entry = Entry(width=45)
+website_entry = Entry(width=26)
 website_entry.grid(row=1, column=1, columnspan=2)
 website_entry.focus()
+
+website_search = Button(text="Search", command=search_password)
+website_search.grid(row=1, column=2)
 
 # Email/Username label, email/username entry (width: 35)
 username_label = Label(text="Email/Username:")
