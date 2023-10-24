@@ -57,12 +57,24 @@ def save_password():
 
 def clear_form():
     website_entry.delete(0, END)
+    username_entry.delete(0, END)
     username_entry.insert(0, "bryan@email.com")
     password_entry.delete(0, END)
 
 
 def search_password():
-    pass
+    try:
+        site = website_entry.get()
+        with open("passwords.json", 'r') as password_file:
+            data = json.load(password_file)
+            email = data[site]["email"]
+            password = data[site]["password"]
+            messagebox.showinfo(title=site, message=f"Email: {email}\nPassword: {password}")
+    except FileNotFoundError:
+        messagebox.showinfo(title="File not found", message=f"No password file found.")
+    except KeyError:
+        messagebox.showinfo(title="Entry not found", message=f"No details for '{site}' found.")
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -75,36 +87,36 @@ canvas.create_image(100, 100, image=logo_img)
 canvas.grid(row=0, column=1)
 
 # Website label, website entry (width:35)
-website_label = Label(text="Website:")
-website_label.grid(row=1, column=0)
+website_label = Label(text="Website:", width=15, anchor='e')
+website_label.grid(row=1, column=0, sticky='e')
 
-website_entry = Entry(width=26)
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry = Entry(width=32)
+website_entry.grid(row=1, column=1, columnspan=2, sticky='w')
 website_entry.focus()
 
-website_search = Button(text="Search", command=search_password)
-website_search.grid(row=1, column=2)
+website_button = Button(text="Search", command=search_password, width=13)
+website_button.grid(row=1, column=2, sticky='w')
 
 # Email/Username label, email/username entry (width: 35)
-username_label = Label(text="Email/Username:")
-username_label.grid(row=2, column=0)
+username_label = Label(text="Email/Username:", width=15, anchor='e')
+username_label.grid(row=2, column=0, sticky='e')
 
-username_entry = Entry(width=45)
-username_entry.grid(row=2, column=1, columnspan=2)
+username_entry = Entry(width=50)
+username_entry.grid(row=2, column=1, columnspan=2, sticky='w')
 username_entry.insert(0, "bryan@email.com")
 
 # Password label, password entry (width: 21), generate button
-password_label = Label(text="Password:")
-password_label.grid(row=3, column=0)
+password_label = Label(text="Password:", width=15, anchor='e')
+password_label.grid(row=3, column=0, sticky='e')
 
-password_entry = Entry(width=26)
-password_entry.grid(row=3, column=1)
+password_entry = Entry(width=32)
+password_entry.grid(row=3, column=1, sticky='w')
 
-password_button = Button(text="Generate Password", command=generate_password)
-password_button.grid(row=3, column=2)
+password_button = Button(text="Generate", command=generate_password, width=13)
+password_button.grid(row=3, column=2, sticky='w')
 
 # Add button (width: 35)
-add_button = Button(text="Add", width=38, command=save_password)
-add_button.grid(row=4, column=1, columnspan=2)
+add_button = Button(text="Add", width=42, command=save_password)
+add_button.grid(row=4, column=1, columnspan=2, sticky='w')
 
 window.mainloop()
