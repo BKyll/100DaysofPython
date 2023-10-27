@@ -7,17 +7,14 @@ import random
 
 GMAIL = "emptypork@gmail.com"
 PASSWORD = "okamuchajpxxfcxv"
-
-now = dt.datetime.now()
+NOW = dt.datetime.now()
 
 
 def pick_letter(name):
     ltr_choice = random.choice(os.listdir(".\\letter_templates"))
     with open(f".\\letter_templates\\{ltr_choice}", 'r') as ltr:
         letter = ltr.read()
-
     letter = letter.replace(f"[NAME]", f"{name}")
-
     return letter
 
 
@@ -36,11 +33,7 @@ def send_email(email, name, body):
 
 with open('birthdays.csv', 'r') as birthday_file:
     birthdays = csv.DictReader(birthday_file)
-
     for row in birthdays:
-        bd_month = row['month']
-        bd_day = row['day']
-
-        if int(now.month) == int(bd_month) and int(now.day) == int(bd_day):
+        if int(NOW.month) == int(row['month']) and int(NOW.day) == int(row['day']):
             email_body = pick_letter(row['name'])
             send_email(row['email'], row['name'], email_body)
