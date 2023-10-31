@@ -4,8 +4,9 @@ import requests
 
 def get_quote():
     quote = requests.get(url="https://api.kanye.rest")
+    quote.raise_for_status()
     quote = quote.json()
-    quote_text.
+    canvas.itemconfig(quote_text, text=f"{quote['quote']}.")
 
 
 window = Tk()
