@@ -11,8 +11,8 @@ NOW = dt.datetime.now()
 
 
 def pick_letter(name):
-    ltr_choice = random.choice(os.listdir(".\\letter_templates"))
-    with open(f".\\letter_templates\\{ltr_choice}", 'r') as ltr:
+    ltr_choice = random.choice(os.listdir("letter_templates"))
+    with open(f"letter_templates\\{ltr_choice}", 'r') as ltr:
         letter = ltr.read()
     letter = letter.replace(f"[NAME]", f"{name}")
     return letter
